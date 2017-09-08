@@ -44,7 +44,7 @@ public class IndexControllerTest {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
         mockMvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("recipeapp/index"));
+                .andExpect(view().name("index"));
     }
 
     @Test
@@ -62,7 +62,7 @@ public class IndexControllerTest {
         // THEN
 
         //test view name
-        assertEquals("recipeapp/index", viewName);
+        assertEquals("index", viewName);
         // test num times call RecipeService.getRecipes()
         verify(recipeService, times(1)).getRecipes();
         // test num times call Model.addAttribute()
@@ -87,7 +87,7 @@ public class IndexControllerTest {
         String viewName = indexController.getIndexPage(model);
 
         // THEN
-        assertEquals("recipeapp/index", viewName);
+        assertEquals("index", viewName);
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
         Set<Recipe> setValueCaptor = argumentCaptor.getValue();
