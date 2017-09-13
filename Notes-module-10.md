@@ -26,3 +26,10 @@ Example:
             th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
 </head>
 ```
+
+### Processing Form Posts with Spring MVC
+**Data Binding in Spring**
+- Command Objects (aka Backing Beans)
+    - are used to transfer data to and from web forms
+- Spring wil automatically ding data of form posts
+- Biding done by property name (less 'get' / 'set')

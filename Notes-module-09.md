@@ -178,6 +178,7 @@ Steps:
 - annotate
     - @RunWith(SpringRunner.class)
     - @DataJpaTest - this will bring up an embedded database, and configure Spring Data JPA
+    - or @SpringBootTest
 
 Example:
 ```java
@@ -200,6 +201,14 @@ Notes:
 - in integration test the Spring Context will bring up
 - by default, for each test class, the Spring Context will bring up ONLY once
 - use the annotate @DirtiesContext, to force reload Spring Context after method test
+- @DataJpaTest
+    - provides some standard setup needed for testing the persistence layer:
+    - configuring H2, an in-memory database
+    - setting Hibernate, Spring Data, and the DataSource
+    - performing an @EntityScan
+    - turning on SQL logging
+- @SpringBootTest
+    - can be used when we need to bootstrap the entire container
 
 ### Maven Failsafe Plugin
 - By default Maven run all test (unit an integration tests) in the 'test' bean lifecycle
