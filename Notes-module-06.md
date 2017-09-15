@@ -52,12 +52,15 @@ Multiple Posts are likely to create multiple resources
 	204 Accepted
 - 200 series indicate successful request
 	- 301 Moved Permanently
-- 300 series are redirections
+- 300 series are redirection
 	- 301 Moved Permanently
 - 400 series are client errors
-	- 400 Bad Request;
+	- 400 Bad Request, can not process due to the client error;
 	- 401 Not Authorized;
-	- 404 Not Found
+	- 404 Not Found - Resource not found
+	- 405 Method not allowed, HTTP method not allowed
+	- 409 Conflict, possible with simultaneous updates
+	- 417 Expectations failed, sometimes used with RESTFull interfaces
 - 500 series are server side errors
 	- 500 Internal Server Error; 503 Service Unavailable
 

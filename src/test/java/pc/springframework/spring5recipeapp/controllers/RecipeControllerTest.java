@@ -11,6 +11,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 import pc.springframework.spring5recipeapp.commands.RecipeCommand;
 import pc.springframework.spring5recipeapp.domain.Recipe;
+import pc.springframework.spring5recipeapp.exceptions.NotFoundException;
 import pc.springframework.spring5recipeapp.services.RecipeService;
 
 import static org.junit.Assert.*;
@@ -42,7 +43,10 @@ public class RecipeControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
         controller = new RecipeController(service);
-        mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        //mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(controller)
+                .setControllerAdvice(new ControllerExceptionHandler())
+                .build();
     }
 
     @Test
@@ -67,7 +71,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMokMvcShowById() throws Exception {
+    public void testGetRecipe() throws Exception {
         Recipe recipe = new Recipe();
         recipe.setId(1L);
 
@@ -80,7 +84,25 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMokMvcNewRecipe() throws Exception {
+    public void testGetRecipeNotFound() throws Exception {
+
+        when(service.findById(anyLong())).thenThrow(NotFoundException.class);
+
+        mockMvc.perform(get("/recipe/1/show"))
+                .andExpect(status().isNotFound())
+                .andExpect(view().name("404error"));
+    }
+
+    @Test
+    public void testGetRecipeNumberFormatException() throws Exception {
+
+        mockMvc.perform(get("/recipe/InvalidId/show"))
+                .andExpect(status().isBadRequest())
+                .andExpect(view().name("400error"));
+    }
+
+    @Test
+    public void testGetNewRecipeForm() throws Exception {
         mockMvc.perform(get("/recipe/new"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("recipe/recipeform"))
@@ -88,7 +110,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvcUpdateRecipe() throws Exception {
+    public void testGetUpdateRecipeForm () throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
 
@@ -101,7 +123,7 @@ public class RecipeControllerTest {
     }
 
     @Test
-    public void testMockMvcSaveOrUpdate() throws Exception {
+    public void testPostNewRecipeForm() throws Exception {
         RecipeCommand command = new RecipeCommand();
         command.setId(2L);
 
@@ -111,13 +133,31 @@ public class RecipeControllerTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("id", "")
                 .param("description", "some string")
+                .param("directions", "some directions")
         )
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/recipe/2/show"));
     }
 
     @Test
-    public void testMokMvcDeleteById() throws Exception {
+    public void testPostNewRecipeFormValidationFail() throws Exception {
+        RecipeCommand command = new RecipeCommand();
+        command.setId(2L);
+
+        when(service.saveRecipeCommand(any())).thenReturn(command);
+
+        mockMvc.perform(post("/recipe")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .param("id", "")
+
+        )
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("recipe"))
+                .andExpect(view().name("recipe/recipeform"));
+    }
+
+    @Test
+    public void testDeleteAction() throws Exception {
         mockMvc.perform(get("/recipe/1/delete"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(view().name("redirect:/"));

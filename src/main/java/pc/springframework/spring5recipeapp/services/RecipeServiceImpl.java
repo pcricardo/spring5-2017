@@ -7,6 +7,7 @@ import pc.springframework.spring5recipeapp.commands.RecipeCommand;
 import pc.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import pc.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import pc.springframework.spring5recipeapp.domain.Recipe;
+import pc.springframework.spring5recipeapp.exceptions.NotFoundException;
 import pc.springframework.spring5recipeapp.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -42,7 +43,9 @@ public class RecipeServiceImpl implements RecipeService {
     public Recipe findById(Long id) {
         Optional<Recipe> recipeOptional = recipeRepository.findById(id);
         if (!recipeOptional.isPresent()) {
-            throw new RuntimeException("Recipe not found! id:" + id);
+            log.debug("Recipe not found! id:" + id);
+            //throw new RuntimeException("Recipe not found! id:" + id);
+            throw new NotFoundException("Recipe not found. For ID value: " + id.toString());
         }
         return recipeOptional.get();
     }

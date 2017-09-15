@@ -8,6 +8,7 @@ import pc.springframework.spring5recipeapp.commands.RecipeCommand;
 import pc.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
 import pc.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
 import pc.springframework.spring5recipeapp.domain.Recipe;
+import pc.springframework.spring5recipeapp.exceptions.NotFoundException;
 import pc.springframework.spring5recipeapp.repositories.RecipeRepository;
 
 import java.util.HashSet;
@@ -76,6 +77,19 @@ public class RecipeServiceImplTest {
 
     }
 
+    @Test(expected = NotFoundException.class)
+    public void findByIdWhenIdNotExistThenExpectNotFoundException() throws Exception{
+        //given
+        Optional<Recipe>recipeOptional = Optional.empty();
+        when(recipeRepository.findById(anyLong())).thenReturn(recipeOptional);
+
+        //when
+        recipeService.findById(anyLong());
+
+        //then
+        fail("Exception Expected");
+
+    }
 
     @Test
     public void findCommandById() throws Exception {

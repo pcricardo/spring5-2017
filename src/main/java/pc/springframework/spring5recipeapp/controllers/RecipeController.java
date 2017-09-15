@@ -3,13 +3,17 @@ package pc.springframework.spring5recipeapp.controllers;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pc.springframework.spring5recipeapp.commands.RecipeCommand;
 import pc.springframework.spring5recipeapp.services.RecipeService;
 
+import javax.validation.Valid;
+
 @Slf4j
 @Controller
 public class RecipeController {
+    private static final String RECIPE_RECIPEFORM_URL = "recipe/recipeform";
     private final RecipeService recipeService;
 
     public RecipeController(RecipeService recipeService) {
@@ -37,19 +41,24 @@ public class RecipeController {
         log.debug("### RecipeController - update recipe form id:" + id);
 
         model.addAttribute("recipe", recipeService.findCommandById(Long.valueOf(id)));
-        return "recipe/recipeform";
+        return RECIPE_RECIPEFORM_URL;
     }
 
     @PostMapping("recipe")
-    public String saveOrUpdate(@ModelAttribute RecipeCommand command) {
+    public String saveOrUpdate(@Valid @ModelAttribute("recipe") RecipeCommand command, BindingResult bindingResult) {
         log.debug("### RecipeController - saveOrUpdate");
+
+        if (bindingResult.hasErrors()) {
+            bindingResult.getAllErrors().forEach(objectError -> log.debug("### RecipeController - bindingResult error - " + objectError.toString()));
+            return RECIPE_RECIPEFORM_URL;
+        }
 
         RecipeCommand savedCommand = recipeService.saveRecipeCommand(command);
         return "redirect:/recipe/" + savedCommand.getId() + "/show";
     }
 
     @GetMapping("recipe/{id}/delete")
-    public String deleteById(@PathVariable String id){
+    public String deleteById(@PathVariable String id) {
         log.debug("### RecipeController - delete recipe by id:" + id);
 
         recipeService.deleteById(Long.valueOf(id));
