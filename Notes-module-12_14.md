@@ -88,7 +88,7 @@ To change this behavior, follow this steps:
 - create a disk folder to save the changes
 - `docker run run -p 27017:27017 -v /my/own/datadir:/data/db -d mongo`
 	- where "/my/own/datadir" is the folder created
-	- in windows `docker run -p 27017:27017 -v /userlogin/<path>:/data/db -d mongo`
+	- in windows `docker run -p 27017:27017 -v /userlogin/[path]:/data/db -d mongo`
 
 ### Run Rabbit MQ Container
 `docker run -d --hostname guru-rabbit --name some-rabbit -p 8080:15672 -p 5671:5671 -p 5672:5672 rabbitmq:3-management`
@@ -104,7 +104,7 @@ To change this behavior, follow this steps:
 
 `docker run -d --name guru-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -v /my/own/datadir:/var/lib/mysql -p 3306:3306  mysql`
 - where "/my/own/datadir" is the folder created
-- in windows "-v /userlogin/<path>/db:/var/lib/mysql"
+- in windows "-v /userlogin/[path]/db:/var/lib/mysql"
 
 ### Docker House Keeping
 - once a volume is no longer associated with a container, it is considered "dangling"
