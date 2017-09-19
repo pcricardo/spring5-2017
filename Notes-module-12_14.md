@@ -104,7 +104,7 @@ To change this behavior, follow this steps:
 
 `docker run -d --name guru-mysql -e MYSQL_ALLOW_EMPTY_PASSWORD=yes -v /my/own/datadir:/var/lib/mysql -p 3306:3306  mysql`
 - where "/my/own/datadir" is the folder created
-- in windows "-v /userlogin/[path]/db:/var/lib/mysql"
+- in windows "-v /userlogin/[path]:/var/lib/mysql"
 
 ### Docker House Keeping
 - once a volume is no longer associated with a container, it is considered "dangling"
