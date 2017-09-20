@@ -35,6 +35,7 @@ Steps:
 - in InteliJ
     - add a folder '.circleci' and a file 'config.yml'
     - in the file, copy the code from CircleCI website
+- in CirleCI website, start building project
 
 ### Code Coverage Configuration
 https://codecov.io
@@ -45,11 +46,40 @@ https://codecov.io
 - in codecov website
 - sing up with GtiHub account
 - add a repository from Github
-- in InteliJ project - add report in Readme file
-    - in codecov go to
-        - repository ->  settings -> badge
-        - copy Markdown
-    - in Readme file add the copy text
+- in InteliJ project
+    - add maven dependency
+    ```xml
+    <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>cobertura-maven-plugin</artifactId>
+        <version>2.7</version>
+        <configuration>
+            <formats>
+                <format>html</format>
+                <format>xml</format>
+            </formats>
+            <check />
+        </configuration>
+    </plugin>
+    ```
+    - in CirleCI config.yml, add
+    ```
+      # run tests! and gen code coverage
+      - run: mvn integration-test cobertura:cobertura
+
+      - store_test_results:
+          path: target/surefire-reports
+
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
+    ```
+
+    - add report in Readme file
+        - in codecov go to
+            - repository ->  settings -> badge
+            - copy Markdown
+        - in Readme file add the copy text
 
 
 ### Spring Boot Configuration for MySQL
