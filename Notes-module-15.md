@@ -29,6 +29,13 @@
     - Isolation - Results of transactions are as if they were done end to end
     - Durability - Once a transaction is committed, it remains so
 
+### CircleCI Configuration
+Steps:
+- in CirleCI website, add the GutHub repository
+- in InteliJ
+    - add a folder '.circleci' and a file 'config.yml'
+    - in the file, copy the code from CircleCI website
+
 ### Code Coverage Configuration
 https://codecov.io
 - it has a free account that allow 1 repository
