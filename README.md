@@ -1,5 +1,7 @@
 # learn-spring5-2017
 
+[![codecov](https://codecov.io/gh/pcricardo/spring5-2017/branch/master/graph/badge.svg)](https://codecov.io/gh/pcricardo/spring5-2017)
+
 I use this app to pratice Spring 5.
 Subjects:
 - DI
